@@ -20,10 +20,15 @@ const START_SERVER = () => {
 
   //Middleware handle error
   app.use(errorHandlingMiddleware)
-
-  app.listen(env.APP_PORT, env.APP_HOST, () => {
-    console.log(`I am running at ${process.env.APP_HOST}:${env.APP_PORT}`)
-  })
+  if (env.BUILD_MODE === 'dev') {
+    app.listen(env.APP_PORT, env.APP_HOST, () => {
+      console.log(`I am running at ${env.APP_HOST}:${env.APP_PORT}`)
+    })
+  } else {
+    app.listen(process.env.PORT, () => {
+      console.log(`I am running at port ${process.env.PORT}`)
+    })
+  }
 
   exitHook(() => {
     console.log('Exiting...')
