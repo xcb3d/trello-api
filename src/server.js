@@ -1,14 +1,43 @@
-const express = require('express')
+/* eslint-disable no-console */
 
-const app = express()
+import express from 'express'
+import exitHook from 'async-exit-hook'
+import { CLOSE_DB, CONNECT_DB, GET_DB } from '~/config/mongodb'
+import { env } from '~/config/environment'
+import { APIs_V1 } from '~/routes/v1'
+import { errorHandlingMiddleware } from './middlewares/errorHandlingMiddleware'
+import { corsOptions } from '~/config/cors'
+import cors from 'cors'
 
-const host = 'localhost'
-const port = 3000
+const START_SERVER = () => {
+  const app = express()
 
-app.get('/', (req, res) => {
-  res.send('Hello World!')
-})
+  app.use(cors(corsOptions))
 
-app.listen(port, host, () => {
-  console.log(`Example app listening at http://${host}:${port}`)
-})
+  app.use(express.json())
+
+  app.use('/v1', APIs_V1)
+
+  //Middleware handle error
+  app.use(errorHandlingMiddleware)
+
+  app.listen(env.APP_PORT, env.APP_HOST, () => {
+    console.log(`I am running at ${process.env.APP_HOST}:${env.APP_PORT}`)
+  })
+
+  exitHook(() => {
+    console.log('Exiting...')
+    CLOSE_DB()
+    console.log('Exited.')
+  })
+}
+
+// START_SERVER()
+
+CONNECT_DB()
+  .then(() => console.log('Connected'))
+  .then(START_SERVER())
+  .catch((e) => {
+    console.error(e)
+    process.exit()
+  })
