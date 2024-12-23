@@ -9,7 +9,19 @@ const createNew = async (req, res, next) => {
   }
 }
 
+const update = async (req, res, next) => {
+  try {
+    // console.log(req)
+    const userInfo = req.jwtDecoded
+    const updatedCard = await cardService.update(req.params.id, req.body, req.file, userInfo)
+    res.status(StatusCodes.OK).json(updatedCard)
+  } catch (error) {
+    next(error)
+  }
+}
+
 
 export const cardController = {
-  createNew
+  createNew,
+  update
 }
