@@ -6,8 +6,8 @@ import { OBJECT_ID_RULE, OBJECT_ID_RULE_MESSAGE } from '~/utils/validators'
 
 const createNew = async (req, res, next) => {
   const correctCondition = Joi.object({
-    title: Joi.string().required().min(3).max(50).trim().strict(),
-    description: Joi.string().required().min(3).max(256).trim().strict(),
+    title: Joi.string().required().min(3).max(50).trim(),
+    description: Joi.string().required().min(3).max(256).trim(),
     type: Joi.string().valid(BOARD_TYPES.PUBLIC, BOARD_TYPES.PRIVATE).required(),
     columnOrdersIds: Joi.array().items(Joi.string().pattern(OBJECT_ID_RULE).message(OBJECT_ID_RULE_MESSAGE))
   })
@@ -26,8 +26,8 @@ const createNew = async (req, res, next) => {
 
 const update = async (req, res, next) => {
   const correctCondition = Joi.object({
-    title: Joi.string().min(3).max(50).trim().strict(),
-    description: Joi.string().min(3).max(256).trim().strict(),
+    title: Joi.string().min(3).max(50).trim(),
+    description: Joi.string().min(3).max(256).trim(),
     type: Joi.string().valid(BOARD_TYPES.PUBLIC, BOARD_TYPES.PRIVATE),
     columnOrdersIds: Joi.array().items(Joi.string().pattern(OBJECT_ID_RULE).message(OBJECT_ID_RULE_MESSAGE))
   })
