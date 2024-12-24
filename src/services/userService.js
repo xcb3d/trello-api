@@ -32,7 +32,7 @@ const createNew = async (reqBody) => {
     const getNewUser = await userModel.findOneById(createdUser.insertedId)
 
     // Gửi email xác nhận người dùng
-    const verificationLink = `${WEBSITE_DOMAIN}/account/verification?email=${getNewUser.email}&token=${getNewUser.verifyToken}`
+    const verificationLink = `https://trello-clone-web-yb7r.vercel.app/account/verification?email=${getNewUser.email}&token=${getNewUser.verifyToken}`
     const customSubject = 'Xác nhận email'
     const htmlContent = `
       <!--
